@@ -25,8 +25,16 @@ def apply_custom_css():
                 background-image: radial-gradient(circle at 50% 50%, #1c1c1e 0%, #0c0c0d 80%) !important;
                 background-color: #0c0c0d !important;
             }
+            /* Force the outer Streamlit button wrapper to span 100% of the sidebar */
+            [data-testid="stSidebar"] div.stButton {
+                width: 100% !important;
+                display: block !important;
+            }
             [data-testid="stSidebar"] div.stButton > button {
-                width: 100%;
+                width: 100% !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
                 background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%) !important;
                 color: #1A120B !important;
                 font-weight: 900 !important;
@@ -43,6 +51,7 @@ def apply_custom_css():
             }
         </style>
     """, unsafe_allow_html=True)
+
 
 def render_sidebar():
     st.sidebar.markdown("<h1 style='text-align: center; color: #D4AF37; margin-bottom: 0px;'>🏆 Success Road</h1>", unsafe_allow_html=True)
