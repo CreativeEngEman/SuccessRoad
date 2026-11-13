@@ -25,13 +25,16 @@ def apply_custom_css():
                 background-image: radial-gradient(circle at 50% 50%, #1c1c1e 0%, #0c0c0d 80%) !important;
                 background-color: #0c0c0d !important;
             }
-            /* Force the outer Streamlit button wrapper to span 100% of the sidebar */
+            /* Force every sidebar wrapper container to stretch 100% full width */
+            [data-testid="stSidebar"] div.element-container,
             [data-testid="stSidebar"] div.stButton {
                 width: 100% !important;
                 display: block !important;
             }
-            [data-testid="stSidebar"] div.stButton > button {
+            [data-testid="stSidebar"] div.stButton > button,
+            [data-testid="stSidebar"] button[kind="secondary"] {
                 width: 100% !important;
+                min-width: 100% !important;
                 display: flex !important;
                 justify-content: center !important;
                 align-items: center !important;
@@ -39,19 +42,19 @@ def apply_custom_css():
                 color: #1A120B !important;
                 font-weight: 900 !important;
                 font-size: 1rem !important;
-                padding: 12px !important;
+                padding: 12px 10px !important;
                 border-radius: 8px !important;
                 border: 2px solid #AA771C !important;
                 box-shadow: 0px 4px 0px #7A5210, 0px 6px 10px rgba(0, 0, 0, 0.6) !important;
                 margin-bottom: 8px !important;
             }
-            [data-testid="stSidebar"] div.stButton > button:hover {
+            [data-testid="stSidebar"] div.stButton > button:hover,
+            [data-testid="stSidebar"] button[kind="secondary"]:hover {
                 border: 2px solid #FFFFFF !important;
                 box-shadow: 0px 4px 0px #7A5210, 0px 0px 14px rgba(212, 175, 55, 0.85) !important;
             }
         </style>
     """, unsafe_allow_html=True)
-
 
 def render_sidebar():
     st.sidebar.markdown("<h1 style='text-align: center; color: #D4AF37; margin-bottom: 0px;'>🏆 Success Road</h1>", unsafe_allow_html=True)
@@ -64,14 +67,22 @@ def render_sidebar():
     if 'current_page' not in st.session_state:
         st.session_state.current_page = "Home"
 
+    # Version-safe full-width button helper
+    def nav_btn(label: str, key_name: str) -> bool:
+        try:
+            return st.button(label, key=key_name, use_container_width=True)
+        except TypeError:
+            return st.button(label, key=key_name)
+
     with st.sidebar:
         st.write("")
-        if st.button("🏠 Home & Mission Story", key="nav_home"):
+        if nav_btn("🏠 Home & Mission Story", "nav_home"):
             st.session_state.current_page = "Home"
-        if st.button("💰 Millionaire Statistics", key="nav_stats"):
+        if nav_btn("💰 Millionaire Statistics", "nav_stats"):
             st.session_state.current_page = "Stats"
-        if st.button("🔮 Success Roadmap (ML Engine)", key="nav_roadmap"):
+        if nav_btn("🔮 Success Roadmap (ML Engine)", "nav_roadmap"):
             st.session_state.current_page = "Roadmap"
+
 
 def create_circle_badge(main_value: str, label_html: str) -> str:
     return (
